@@ -4,6 +4,7 @@ import br.com.alurafood.pagamentos.dto.PagamentoDto;
 import br.com.alurafood.pagamentos.http.PedidoClient;
 import br.com.alurafood.pagamentos.model.Enum.Status;
 import br.com.alurafood.pagamentos.model.Pagamento;
+import br.com.alurafood.pagamentos.model.Pedido;
 import br.com.alurafood.pagamentos.repository.PagamentoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,12 @@ public class PagamentoService {
         Pagamento pagamento = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException());
 
-        return modelMapper.map(pagamento, PagamentoDto.class);
+        Pedido items = pedido.ObterItensDoPedido(pagamento.getPedidoId());
+
+        PagamentoDto dto = modelMapper.map(pagamento, PagamentoDto.class);
+        dto.setItens(items.getItens());
+
+        return dto;
     }
 
     public PagamentoDto criarPagamento(PagamentoDto dto) {
@@ -81,4 +87,6 @@ public class PagamentoService {
         pagamento.get().setStatus(Status.CONFIRMADO_SEM_INTEGRACAO);
         repository.save(pagamento.get());
     }
+
+
 }
