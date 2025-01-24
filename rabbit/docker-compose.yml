@@ -1,0 +1,15 @@
+version: "4.37.1"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    container_name: rabbitmq
+    restart: "no"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./dados:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=douglasporto  # Usuário do RabbitMQ
+      - RABBITMQ_DEFAULT_PASS=douglasporto  # Senha do RabbitMQ
